@@ -60,6 +60,27 @@ h2 { font: 400 clamp(2.4rem, 5vw, 3.75rem)/1.02 var(--serif); letter-spacing: -.
 .places li + li { border-left: 1px solid var(--stone); }
 .places span { display: block; font: 400 clamp(1.65rem, 3.6vw, 2.7rem)/1.1 var(--serif); }
 .places small { color: var(--muted); font-size: .75rem; }
+.focus { padding-block: clamp(64px, 9vw, 112px); background: var(--paper); }
+.focus-heading { display: grid; grid-template-columns: 1.1fr .9fr; align-items: end; gap: clamp(24px, 7vw, 92px); padding-bottom: 24px; border-bottom: 1px solid var(--stone); }
+.focus-heading h2 { max-width: 13ch; margin-top: 12px; color: var(--wine); }
+.focus-lead { max-width: 46ch; padding-bottom: 4px; color: var(--muted); }
+.focus-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 24px; }
+.focus-card { min-width: 0; background: var(--sand); border: 1px solid var(--line); }
+.focus-art { position: relative; height: 132px; overflow: hidden; border-bottom: 1px solid var(--line); }
+.focus-art > span { position: absolute; z-index: 1; top: 12px; left: 14px; color: var(--wine); font-size: .64rem; font-weight: 700; letter-spacing: .1em; }
+.focus-art--insight { background-color: #eee5d8; background-image: radial-gradient(circle, rgba(112,42,61,.25) 1px, transparent 1.6px); background-size: 12px 12px; }
+.focus-art--insight::before { content: ""; position: absolute; width: 106px; height: 106px; top: 39px; right: 18%; border: 1px solid var(--wine); border-radius: 50%; box-shadow: 0 0 0 13px rgba(112,42,61,.08), 0 0 0 27px rgba(112,42,61,.04); }
+.focus-art--insight::after { content: ""; position: absolute; width: 7px; height: 7px; top: 84px; right: calc(18% + 49px); border-radius: 50%; background: var(--wine); box-shadow: 30px -23px 0 -1px var(--wine), 57px 12px 0 -1px var(--wine); }
+.focus-art--brand { background: linear-gradient(135deg, #d9cbb9, #f5f0e6 55%, #e6d9cb); }
+.focus-art--brand::before { content: ""; position: absolute; width: 48%; height: 64%; right: 15%; top: 24%; background: repeating-linear-gradient(0deg, #702a3d 0 4px, #792f43 4px 7px); transform: rotate(-7deg); box-shadow: -38px -16px 0 -4px #f6f2ea, -70px 17px 0 -5px #b6a08a; }
+.focus-art--brand::after { content: ""; position: absolute; width: 26%; height: 45%; right: 10%; top: 17%; border: 1px solid rgba(33,29,27,.4); background: rgba(246,242,234,.78); }
+.focus-art--experience { background-color: #eee5d8; background-image: linear-gradient(rgba(112,42,61,.08) 1px, transparent 1px), linear-gradient(90deg, rgba(112,42,61,.08) 1px, transparent 1px); background-size: 28px 28px; }
+.focus-art--experience::before { content: ""; position: absolute; left: 27%; right: 13%; bottom: 15px; height: 64px; background: linear-gradient(to top, var(--wine) 0 100%, transparent 100%) 0 100% / 16px 34px no-repeat, linear-gradient(to top, #8b5360 0 100%, transparent 100%) 28% 100% / 16px 48px no-repeat, linear-gradient(to top, #a8767d 0 100%, transparent 100%) 56% 100% / 16px 40px no-repeat, linear-gradient(to top, #c2a4a0 0 100%, transparent 100%) 84% 100% / 16px 60px no-repeat; }
+.focus-art--experience::after { content: ""; position: absolute; left: 26%; right: 12%; bottom: 14px; border-bottom: 1px solid var(--wine); }
+.focus-copy { padding: 17px 18px 21px; }
+.focus-copy .eyebrow { font-size: .65rem; }
+.focus-copy h3 { margin-block: 8px 7px; font: 400 clamp(1.45rem, 2.2vw, 1.9rem)/1.08 var(--serif); }
+.focus-copy p:last-child { max-width: 38ch; color: var(--muted); font-size: .88rem; line-height: 1.55; }
 .journey { padding-block: clamp(65px, 9vw, 116px); }
 .journey-lead { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 12px 28px; padding-bottom: 21px; border-bottom: 1px solid var(--stone); }
 .quick { display: flex; flex-wrap: wrap; gap: 4px 17px; }
@@ -89,6 +110,17 @@ h2 { font: 400 clamp(2.4rem, 5vw, 3.75rem)/1.02 var(--serif); letter-spacing: -.
   h1 { font-size: clamp(2.9rem, 9vw, 3.5rem); }
   .portrait { max-width: 460px; }
   .about-spread, .contact-inner { grid-template-columns: 1fr; }
+  .focus-heading { grid-template-columns: 1fr; gap: 14px; }
+  .focus-grid { grid-template-columns: 1fr; }
+  .focus-card { display: grid; grid-template-columns: 112px 1fr; }
+  .focus-art { height: 100%; min-height: 176px; border-right: 1px solid var(--line); border-bottom: 0; }
+  .focus-art--insight::before { width: 72px; height: 72px; top: 62px; right: 15%; }
+  .focus-art--insight::after { top: 95px; right: calc(15% + 32px); }
+  .focus-art--brand::before { width: 54%; height: 58%; right: 12%; top: 31%; }
+  .focus-art--brand::after { width: 29%; height: 38%; right: 8%; top: 24%; }
+  .focus-art--experience::before { left: 18%; right: 10%; }
+  .focus-art--experience::after { left: 17%; right: 9%; }
+  .focus-copy { padding: 15px 14px 17px; }
   .places li { padding-inline: 8px; }
   .places small { display: block; line-height: 1.35; }
   .milestone { grid-template-columns: 1fr; gap: 7px; }
@@ -98,3 +130,4 @@ h2 { font: 400 clamp(2.4rem, 5vw, 3.75rem)/1.02 var(--serif); letter-spacing: -.
   html { scroll-behavior: smooth; }
   .button, .header-inner nav a { transition: background-color .2s, color .2s; }
 }
+
