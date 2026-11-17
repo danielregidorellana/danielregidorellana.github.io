@@ -1,0 +1,81 @@
+name: Deploy portfolio from ZIP
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/Daniel_Regidor_Portfolio_GitHub_Pages.zip'
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: true
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+      - name: Extract static site from ZIP
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path, PurePosixPath
+          from zipfile import ZipFile
+          import shutil
+
+          archive = Path('.github/Daniel_Regidor_Portfolio_GitHub_Pages.zip')
+          output = Path('public')
+          allowed = {'.html', '.css', '.js', '.json', '.webmanifest', '.svg', '.png', '.jpg', '.jpeg', '.webp', '.avif', '.gif', '.pdf', '.ico', '.woff', '.woff2', '.ttf', '.otf', '.xml', '.txt', '.map', '.mp4', '.webm', '.mp3', '.wav'}
+
+          with ZipFile(archive) as zf:
+              names = [name.replace('\\\\', '/') for name in zf.namelist() if not name.endswith('/') ]
+              name_set = set(names)
+              prefixes = set()
+              for name in names:
+                  if name.endswith('index.html'):
+                      prefix = name[:-len('index.html')]
+                      if all(prefix + page in name_set for page in ('index.html', 'en/index.html', 'es/index.html')):
+                          prefixes.add(prefix)
+              if prefixes:
+                  prefix = min(prefixes, key=lambda p: (p.count('/'), len(p)))
+              else:
+                  candidates = [name[:-len('index.html')] for name in names if name.endswith('index.html')]
+                  if not candidates:
+                      raise SystemExit('No index.html found in the ZIP archive.')
+                  prefix = min(candidates, key=lambda p: (p.count('/'), len(p)))
+              output.mkdir(exist_ok=True)
+              copied = 0
+              for name in names:
+                  if not name.startswith(prefix):
+                      continue
+                  relative = name[len(prefix):]
+                  path = PurePosixPath(relative)
+                  if path.is_absolute() or '..' in path.parts or (path.parts and ':' in path.parts[0]):
+                      raise SystemExit(f'Unsafe path in ZIP archive: {name}')
+                  if path.name != '.nojekyll' and path.suffix.lower() not in allowed:
+                      continue
+                  destination = output.joinpath(*path.parts)
+                  destination.parent.mkdir(parents=True, exist_ok=True)
+                  with zf.open(name) as source, destination.open('wb') as target:
+                      shutil.copyfileobj(source, target)
+                  copied += 1
+              if copied == 0:
+                  raise SystemExit('No publishable files found in the ZIP archive.')
+              if not (output / 'index.html').is_file():
+                  raise SystemExit('The selected site folder does not contain a root index.html.')
+              print(f'Prepared {copied} files from ZIP prefix: {prefix or "<archive root>"}')
+          PY
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
